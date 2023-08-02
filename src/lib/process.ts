@@ -40,3 +40,7 @@ export async function runAsync(ns: NS, script: string): Promise<number> {
 
   return pid;
 }
+
+export function isRunningOnHome(ns: NS, filename: string) {
+  return ns.ps('home').map(process => process.filename).some(fileName => fileName.includes(filename));
+}

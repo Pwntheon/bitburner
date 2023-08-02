@@ -1,6 +1,15 @@
 import { NS } from "@ns";
-import { runAsync } from "lib/process";
+import Publish from "lib/status";
 
 export async function main(ns: NS) {
-  await runAsync(ns, 'utils/companies.js');
+  Publish(ns, {
+    component: "shotgun",
+    status: {
+      dropped: 0.13,
+      income: 15215251,
+      prepping: "",
+      target: "ecorp",
+      ramUsage: 52123
+    }
+  });
 }
