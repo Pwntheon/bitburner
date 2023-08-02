@@ -1,0 +1,11 @@
+
+shotgun controller:
+* When picking prep target, take runtime into account. E.g. if we expect to run for 1 hour, 30 min prep means a lot.
+* Stop spamming log, summary once in a while instead?
+* Make custom log
+
+Daemon:
+* Dedupe augs
+
+Hacknet:
+* Add weights to upgrades

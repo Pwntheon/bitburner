@@ -1,0 +1,1 @@
+[{"name":"home","ram":131072,"busy":true,"target":"foodnstuff","action":"hacking/cyclehack.js","actionPID":277,"income":739754.7937287732}]
