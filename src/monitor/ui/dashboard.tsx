@@ -13,12 +13,10 @@ export interface IDashboardProps {
 }
 
 export const Dashboard = ({ ns, updateHandler, port }: IDashboardProps) => {
-  const [shotgunStatus, setShotgunStatus] = React.useState({ target: "", prepping: "", income: 0, dropped: 0, ramUsage: 0 } as ShotgunStatus);
-
+  const [shotgunStatus, setShotgunStatus] = React.useState({ target: "", prepTarget: "", income: 0, dropped: 0, ramUsage: 0, hackStart: 0, prepDone: 0 } as ShotgunStatus);
 
   async function getStatusMessages(ns: NS) {
-    const port = ns.getPortHandle(ns.pid); 
-    const messages = [];
+    const port = ns.getPortHandle(ns.pid);
     while (!port.empty()) {
       const message = JSON.parse(port.read() as string) as StatusMessage;
       switch (message.component) {
@@ -30,15 +28,34 @@ export const Dashboard = ({ ns, updateHandler, port }: IDashboardProps) => {
       }
     }
   }
-  React.useCallback(() => {
+  React.useEffect(() => {
     updateHandler.register(getStatusMessages);
     return () => updateHandler.unregister(getStatusMessages);
   }, []);
 
   return (
-    <div>
-      <Daemon updateHandler={updateHandler} />
-      <Shotgun updateHandler={updateHandler} />
+    <div className="monitor-dashboard">
+      <Shotgun updateHandler={updateHandler} status={shotgunStatus} />
+      <style>
+        {styles}
+      </style>
     </div>
   )
 }
+
+/*
+
+      <progress max="100" value="80"></progress>
+      */
+
+const styles = `
+.monitor-dashboard {
+  display: flex;
+}
+
+.monitor-dashboard progress[value] {
+  -webkit-appearance:none;
+  height: 4px;
+  transform: translateY(0.2px);
+}
+`;

@@ -10,7 +10,6 @@ class UpdateHandler {
 
   register(handler: UpdateFunction) {
     this.handlers.push(handler);
-    console.log(this.handlers.length);
   }
 
   unregister(handler: UpdateFunction) {

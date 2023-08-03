@@ -1,4 +1,4 @@
-export default {
+const console = {
   bold: "\u001b[1m",
   italic: "\u001b[3m",
   underline: "\u001b[4m",
@@ -20,4 +20,20 @@ export default {
   pinkFill: "\u001b[45m",
   cyanFill: "\u001b[46m",
   whiteFill: "\u001b[47m"
+};
+
+const cssColors = {
+  main: "#00cc00",
+  highlight: "#adff2f",
+  error: "#cc0000",
+  info: "#6495ed",
+  darkGray: "#111111",
+  gray: "#444444",
+  lightGray: "#E0E0E0"
 }
+
+
+export {
+  cssColors,
+  console
+};

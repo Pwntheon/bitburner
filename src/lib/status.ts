@@ -17,6 +17,7 @@ export default function Publish(ns: NS, message: StatusMessage) {
     return;
   }
 
+  console.log(pid, message);
   const port = ns.getPortHandle(pid);
   port.write(JSON.stringify(message));
 }
