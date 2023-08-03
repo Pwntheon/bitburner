@@ -2,8 +2,8 @@ import { NS, NetscriptPort } from '@ns';
 import React from 'lib/react';
 import UpdateHandler from 'monitor/update';
 import Daemon from 'monitor/ui/daemon';
-import { ShotgunStatus } from 'models/status/shotgun';
-import { StatusMessage } from 'models/status/message';
+import { ShotgunStatus } from '../../models/state/batcher';
+import { StatusMessage } from '/models/state/message';
 import Shotgun from 'monitor/ui/shotgun';
 
 export interface IDashboardProps {

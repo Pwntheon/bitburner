@@ -2,7 +2,7 @@ import React from 'lib/react';
 import UpdateHandler from 'monitor/update';
 import useIsRunning from 'monitor/hooks/useIsRunning';
 import ScriptPanel from '/monitor/ui/components/scriptPanel';
-import { ShotgunStatus } from '/models/status/shotgun';
+import { ShotgunStatus } from '../../models/state/batcher';
 import { formatMoney, formatRam } from '/lib/format';
 import InfoElement from '/monitor/ui/components/textElement';
 

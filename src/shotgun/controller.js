@@ -2,7 +2,7 @@ import GetAttackers from './lib/attackers.js';
 import GetTargets from './lib/targets.js';
 import Constants from './data/constants.js';
 import { formatDuration, formatMoney } from './lib/format.js';
-import Publish from '/lib/status.js';
+import Publish from '../lib/status/publish.js';
 
 const types = ['hack', 'weaken1', 'grow', 'weaken2'];
 const scripts = {

@@ -1,5 +1,5 @@
 import { NS } from "@ns";
-import { StatusMessage } from "models/status/message";
+import { StatusMessage } from "lib/status/models";
 
 const monitorScript = "monitor/monitor.js";
 const host = 'home';
