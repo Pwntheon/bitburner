@@ -1,5 +1,6 @@
 import { NS } from "@ns";
 import Target from "batcher/models/target";
+import { formatMoney } from "/lib/format";
 
 export default class TargetManager {
   ns: NS;
@@ -12,10 +13,10 @@ export default class TargetManager {
       // Take all servers with less prep time.
       // If at least one has higher max money,
       // we don't include this because it's strictly worse
-      if(servers.filter(t => t.times.weaken1 < server.times.weaken1).some(t => t.maxMoney > server.maxMoney)) return false;
+      if (servers.filter(t => t.times.weaken1 < server.times.weaken1).some(t => t.maxMoney > server.maxMoney)) return false;
       return true;
     });
-    ns.print(`Filtering "Useless" servers removed ${servers.length - this.allServers.length}`);
+    ns.print(this.allServers.map(s => s.hostname).join(" "));
   }
 
   get targets() {

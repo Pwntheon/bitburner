@@ -76,7 +76,7 @@ export default class Target {
       const batchCost = (this.threads.hack * ramCosts.hack) + (
         (this.threads.grow + this.threads.weaken1 + this.threads.weaken2) * ramCosts.grow
       );
-      const batchesPerCycle = Math.ceil(this.times.weaken / spacer);
+      const batchesPerCycle = Math.ceil(this.times.weaken1 / spacer);
       usedRam = batchCost * batchesPerCycle;
       this.ev = cashPerBatch * spacer * (maxRam / usedRam);
       if (this.greed >= 0.99) break;

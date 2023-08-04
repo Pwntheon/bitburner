@@ -1,10 +1,8 @@
 import { NS, NetscriptPort } from '@ns';
 import React from 'lib/react';
 import UpdateHandler from 'monitor/update';
-import Daemon from 'monitor/ui/daemon';
-import { ShotgunStatus } from '../../models/state/batcher';
-import { StatusMessage } from '/models/state/message';
 import Shotgun from 'monitor/ui/shotgun';
+import { BatcherState, StatusMessage } from '/lib/status/models';
 
 export interface IDashboardProps {
   ns: NS
@@ -13,7 +11,7 @@ export interface IDashboardProps {
 }
 
 export const Dashboard = ({ ns, updateHandler, port }: IDashboardProps) => {
-  const [shotgunStatus, setShotgunStatus] = React.useState({ target: "", prepTarget: "", income: 0, dropped: 0, ramUsage: 0, hackStart: 0, prepDone: 0 } as ShotgunStatus);
+  const [shotgunStatus, setShotgunStatus] = React.useState({ target: "", prepTarget: "", income: 0, dropped: 0, ramUsage: 0, hackStart: 0, prepDone: 0 } as BatcherState);
 
   async function getStatusMessages(ns: NS) {
     const port = ns.getPortHandle(ns.pid);

@@ -5,9 +5,11 @@ import TargetManager from "batcher/targetManager";
 import Job from "/batcher/models/job";
 import { initialDelay } from "/batcher/config";
 import { StatusReporter } from "/lib/status/reporter";
+import { formatRam } from "/lib/format";
 
 export async function main(ns: NS) {
   ns.disableLog("ALL");
+  ns.clearLog();
   const workers = [];
   const reporter = new StatusReporter(ns, "batcher", {dropped: 0, hackStart: 0, income: 0, prepDone:0, prepTarget: "", ramUsage: 0, target: ""});
 
