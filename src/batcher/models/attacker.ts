@@ -3,8 +3,8 @@ import constants from "/data/constants";
 
 export default class Attacker {
   hostname: string;
-  free: number = 0;
-  maxRam: number = 0;
+  free = 0;
+  maxRam = 0;
 
   constructor(hostname: string) {
     this.hostname = hostname;

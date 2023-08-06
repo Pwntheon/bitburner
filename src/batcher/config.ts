@@ -1,21 +1,21 @@
-const types = ['hack', 'weaken1', 'grow', 'weaken2'];
-const scriptNames: { [name: string]: string } = {
-  hack: 'shotgun/utils/hack.js',
-  weaken1: 'shotgun/utils/weaken.js',
-  grow: 'shotgun/utils/grow.js',
-  weaken2: 'shotgun/utils/weaken.js',
-};
+export type jobType = "hack" | "weaken1" | "grow" | "weaken2";
 
-export type JobDetails = { [name: string]: number }
+const jobTypes: jobType[] = ['hack', 'weaken1', 'grow', 'weaken2'];
+const scriptNames: Record<jobType, string> = {
+  hack: 'batcher/remote/hack.js',
+  weaken1: 'batcher/remote/weaken.js',
+  grow: 'batcher/remote/grow.js',
+  weaken2: 'batcher/remote/weaken.js',
+}; 
 
-const ramCosts: JobDetails = {
+const ramCosts: Record<jobType, number> = {
   hack: 1.7,
   weaken1: 1.75,
   grow: 1.75,
   weaken2: 1.75,
 };
 
-const offsets: JobDetails = {
+const offsets: Record<jobType, number> = {
   hack: 0,
   weaken1: 1,
   grow: 2,
@@ -32,7 +32,7 @@ const prepLeeway = 0.0001;
 const maxPrepCost = 0.25;
 
 export {
-  types,
+  jobTypes,
   scriptNames,
   ramCosts,
   offsets,

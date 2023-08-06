@@ -1,6 +1,6 @@
 import { NS } from "@ns";
 
-export type UpdateFunction = (ns: NS) => Promise<void>;
+export type UpdateFunction = ((ns: NS) => Promise<void>) | (() => Promise<void>);
 
 class UpdateHandler {
   handlers: UpdateFunction[];

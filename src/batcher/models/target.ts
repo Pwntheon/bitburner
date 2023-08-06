@@ -1,10 +1,12 @@
 import { NS } from "@ns";
-import { JobDetails, greedIncrement, growthHeadroom, prepLeeway, ramCosts, spacer, weakenHeadroom } from "/batcher/config";
+import { greedIncrement, growthHeadroom, jobType, prepLeeway, ramCosts, spacer, weakenHeadroom } from "/batcher/config";
+import Nuke from "/batcher/helpers/nuke";
 
 export default class Target {
   ns: NS;
   hostname: string;
   isPrepped = false;
+  hasRoot = false;
 
   money = 0;
   maxMoney = 0;
@@ -13,9 +15,10 @@ export default class Target {
   requiredLevel = 0;
   hackChance = 0;
 
-  times: JobDetails;
-  threads: JobDetails;
-  prepThreads: JobDetails;
+  times: Record<jobType, number>;
+  threads: Record<jobType, number>;
+  prepTimes: Record<jobType, number>;
+  prepThreads: Record<jobType, number>;
 
   greed = 0;
   ev = 0;
@@ -25,7 +28,8 @@ export default class Target {
     this.hostname = hostname;
     this.times = { hack: 0, weaken1: 0, grow: 0, weaken2: 0 };
     this.threads = { hack: 0, weaken1: 0, grow: 0, weaken2: 0 };
-    this.prepThreads = { weaken1: 0, grow: 0, weaken2: 0 };
+    this.prepTimes = { hack: 0, weaken1: 0, grow: 0, weaken2: 0 };
+    this.prepThreads = { hack: 0, weaken1: 0, grow: 0, weaken2: 0 };
     this.refresh();
   }
 
@@ -48,20 +52,25 @@ export default class Target {
     this.hackChance = this.ns.formulas.hacking.hackChance(preppedServer, player);
     this.requiredLevel = this.ns.getServerRequiredHackingLevel(this.hostname);
     this.isPrepped = (this.maxMoney - this.money) + (this.security - this.minSecurity) < prepLeeway;
+    this.hasRoot = Nuke(this.ns, this);
   }
 
   setStrategy(maxRam: number) {
     this.refresh();
     const player = this.ns.getPlayer();
     const server = this.ns.getServer(this.hostname);
-    server.hackDifficulty = this.minSecurity;
-    const hackPercent = this.ns.formulas.hacking.hackPercent(server, player);
 
     if (!this.isPrepped) {
-      this.prepThreads.weaken1 = Math.ceil(weakenHeadroom * (this.security - this.minSecurity / 0.05));
+      this.prepThreads.weaken1 = Math.ceil(weakenHeadroom * ((this.security - this.minSecurity) / 0.05));
       this.prepThreads.grow = Math.ceil(growthHeadroom * this.ns.formulas.hacking.growThreads(server, player, this.maxMoney));
       this.prepThreads.weaken2 = Math.ceil(weakenHeadroom * ((this.prepThreads.grow * 0.004) / 0.05));
+      this.prepTimes.weaken1 = this.ns.formulas.hacking.weakenTime(server, player);
+      this.prepTimes.grow = this.ns.formulas.hacking.growTime(server, player);
+      this.prepTimes.weaken2 = this.prepTimes.weaken1;
     }
+
+    server.hackDifficulty = this.minSecurity;
+    const hackPercent = this.ns.formulas.hacking.hackPercent(server, player);
 
     this.greed = 0;
     let usedRam = 0;

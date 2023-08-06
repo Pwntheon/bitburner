@@ -1,6 +1,5 @@
 import { NS } from "@ns";
 import Target from "batcher/models/target";
-import { formatMoney } from "/lib/format";
 
 export default class TargetManager {
   ns: NS;
@@ -20,7 +19,7 @@ export default class TargetManager {
   }
 
   get targets() {
-    return this.allServers.filter(s => s.requiredLevel <= this.ns.getHackingLevel());
+    return this.allServers.filter(s => s.hasRoot);
   }
 
   refresh() {

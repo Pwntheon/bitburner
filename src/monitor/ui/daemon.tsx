@@ -1,4 +1,3 @@
-import { NS } from '@ns';
 import React from 'lib/react';
 import UpdateHandler from 'monitor/update';
 import useIsRunning from 'monitor/hooks/useIsRunning';

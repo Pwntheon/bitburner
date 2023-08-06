@@ -1,25 +1,27 @@
 import { NS, NetscriptPort } from '@ns';
 import React from 'lib/react';
 import UpdateHandler from 'monitor/update';
-import Shotgun from 'monitor/ui/shotgun';
-import { BatcherState, StatusMessage } from '/lib/status/models';
+import Batcher from '/monitor/ui/batcher';
+import StatusReader from '/lib/status/reader';
+import { BatcherState, BatcherStateDefaults } from '/lib/status/models';
+import { cssColors } from '/lib/styles';
 
 export interface IDashboardProps {
-  ns: NS
+  ns: NS,
   updateHandler: UpdateHandler,
   port: NetscriptPort
 }
 
 export const Dashboard = ({ ns, updateHandler, port }: IDashboardProps) => {
-  const [shotgunStatus, setShotgunStatus] = React.useState({ target: "", prepTarget: "", income: 0, dropped: 0, ramUsage: 0, hackStart: 0, prepDone: 0 } as BatcherState);
+  const [batcherState, setBatcherState] = React.useState({ ...BatcherStateDefaults } as BatcherState);
 
-  async function getStatusMessages(ns: NS) {
-    const port = ns.getPortHandle(ns.pid);
-    while (!port.empty()) {
-      const message = JSON.parse(port.read() as string) as StatusMessage;
+  const reader = React.useMemo(() => new StatusReader(ns, port), []);
+
+  async function getStatusMessages() {
+    for (const message of reader.getMessages()) {
       switch (message.component) {
-        case "shotgun":
-          setShotgunStatus(message.status);
+        case "batcher":
+          setBatcherState(message.status);
           return;
         default:
           throw Error("Received status message with unhandled type");
@@ -33,7 +35,7 @@ export const Dashboard = ({ ns, updateHandler, port }: IDashboardProps) => {
 
   return (
     <div className="monitor-dashboard">
-      <Shotgun updateHandler={updateHandler} status={shotgunStatus} />
+      <Batcher updateHandler={updateHandler} state={batcherState} />
       <style>
         {styles}
       </style>
@@ -54,6 +56,13 @@ const styles = `
 .monitor-dashboard progress[value] {
   -webkit-appearance:none;
   height: 4px;
-  transform: translateY(0.2px);
+}
+
+.monitor-dashboard progress[value]::-webkit-progress-value {
+  background-color: ${cssColors.highlight}
+}
+
+.monitor-dashboard progress[value]::-webkit-progress-bar {
+  background-color: ${cssColors.darkGray}
 }
 `;

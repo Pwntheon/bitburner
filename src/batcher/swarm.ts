@@ -1,11 +1,8 @@
 import { NS } from "@ns";
 import Attacker from "/batcher/models/attacker";
 import Job from "/batcher/models/job";
-import { ramCosts, scriptNames, weakenHeadroom } from "/batcher/config";
+import { jobTypes, ramCosts, scriptNames, weakenHeadroom } from "/batcher/config";
 import { maxPrepCost } from "/batcher/config";
-
-const scriptSize = ramCosts.grow;
-
 
 export default class Swarm {
   ns: NS;
@@ -13,6 +10,9 @@ export default class Swarm {
   constructor(ns: NS) {
     this.ns = ns;
     this.attackers = ['home', ...ns.getPurchasedServers()].map(hostname => new Attacker(hostname));
+    for(const attacker of this.attackers) {
+        ns.scp(jobTypes.map(t => scriptNames[t]), attacker.hostname, "home");
+    }
   }
 
   getFree() {
@@ -51,7 +51,7 @@ export default class Swarm {
       jobs[0].threads -= 1;
       jobs[1].threads = Math.ceil(weakenHeadroom * ((jobs[0].threads * 0.004) / 0.05));
     }
-    pids.push(...this.deploy(jobs));
+    pids.push(...this.deploy(jobs.filter(j => j.threads > 0)));
 
     return pids;
   }
@@ -59,7 +59,7 @@ export default class Swarm {
   private getBlocks(minSize = 0) {
     this.refresh();
     return this.attackers.map(a => a.free).filter(f => f >= minSize);
-  }
+  } 
   
   private refresh() {
     for (const attacker of this.attackers) attacker.refresh(this.ns);

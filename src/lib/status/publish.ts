@@ -7,7 +7,6 @@ const host = 'home';
 
 export default function Publish(ns: NS, message: StatusMessage) {
   const process = ns.ps(host).find(process => process.filename.includes(monitorScript));
-  
   const pid = (process === undefined
     ? ns.exec(monitorScript, host)
     : process.pid);
@@ -17,7 +16,6 @@ export default function Publish(ns: NS, message: StatusMessage) {
     return;
   }
 
-  console.log(pid, message);
   const port = ns.getPortHandle(pid);
   port.write(JSON.stringify(message));
 }
