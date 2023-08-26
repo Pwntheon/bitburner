@@ -20,7 +20,7 @@ export default function Batcher({ updateHandler, state }: IBatcherProps) {
       <InfoElement label="Prepping" value={state.prepTarget} />
       <ProgressElement maxValue={state.prepDone - state.prepStarted} value={performance.now() - state.prepStarted} />
       <InfoElement label="Ram usage" value={formatRam(state.ramUsage)} />
-      <InfoElement label="Dropped batches" value={state.dropped + "%"} isLast />
+      <InfoElement label="Dropped batches" value={(state.dropped * 100).toFixed(2) + "%"} isLast />
     </ScriptPanel>
   );
 }

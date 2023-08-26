@@ -20,7 +20,16 @@ export default class Swarm {
     return this.attackers.reduce((curr, acc) => curr + acc.free, 0);
   }
 
-  hasEnoughRam(jobs: Job[]) {
+  getMax() {
+    this.refresh();
+    return this.attackers.reduce((curr, acc) => curr + acc.maxRam, 0);
+  }
+
+  hasEnoughRam(ram: number) {
+    return this.getBlocks(ram).length > 0;
+  }
+  
+  hasEnoughRamForJobs(jobs: Job[]) {
     const size = jobs.reduce((acc, job) => job.threads * ramCosts[job.type], 0);
     return this.getBlocks(size).length > 0;
   }
@@ -47,7 +56,7 @@ export default class Swarm {
       if (actualThreads < initialWeakenJob.threads) return pids;
     }
     this.refresh();
-    while (!this.hasEnoughRam(jobs)) {
+    while (!this.hasEnoughRamForJobs(jobs)) {
       jobs[0].threads -= 1;
       jobs[1].threads = Math.ceil(weakenHeadroom * ((jobs[0].threads * 0.004) / 0.05));
     }

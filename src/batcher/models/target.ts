@@ -20,6 +20,7 @@ export default class Target {
   prepTimes: Record<jobType, number>;
   prepThreads: Record<jobType, number>;
 
+  batchCost = 0;
   greed = 0;
   ev = 0;
 
@@ -82,11 +83,11 @@ export default class Target {
       this.threads.grow = Math.ceil(growthHeadroom * this.ns.formulas.hacking.growThreads(server, player, this.maxMoney));
       this.threads.weaken1 = Math.ceil(weakenHeadroom * ((this.threads.hack * 0.002) / 0.05));
       this.threads.weaken2 = Math.ceil(weakenHeadroom * ((this.threads.grow * 0.004) / 0.05));
-      const batchCost = (this.threads.hack * ramCosts.hack) + (
+      this.batchCost = (this.threads.hack * ramCosts.hack) + (
         (this.threads.grow + this.threads.weaken1 + this.threads.weaken2) * ramCosts.grow
       );
       const batchesPerCycle = Math.ceil(this.times.weaken1 / spacer);
-      usedRam = batchCost * batchesPerCycle;
+      usedRam = this.batchCost * batchesPerCycle;
       this.ev = cashPerBatch * spacer * (maxRam / usedRam);
       if (this.greed >= 0.99) break;
     }
